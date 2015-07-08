@@ -1,0 +1,7 @@
+db.sqlite3
+workspace.xml
+dictionaries
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
