@@ -1,9 +1,11 @@
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.utils.decorators import method_decorator
 from django.views import generic
 from django.views.decorators.http import require_http_methods
 
@@ -36,6 +38,13 @@ def authenticate(request):
     return render(request, 'login.html', {'form': auth_form})
 
 
+@login_required
+def user_logout(request):
+    logout(request)
+
+    return HttpResponseRedirect(settings.LOGOUT_REDIRECT_URL)
+
+
 class HomeView(generic.ListView):
     template_name = 'home.html'
     context_object_name = 'user_checklist_list'
@@ -50,4 +59,10 @@ class HomeView(generic.ListView):
         # sort the set by date updated most recently
         sorted_list = sorted(user_checklists, key=lambda checklist: checklist.updated_at, reverse=True)
         return sorted_list
+
+    # Restrict access to this view to logged in users:
+    #     https://docs.djangoproject.com/en/1.8/topics/class-based-views/intro/#decorating-the-class
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(HomeView, self).dispatch(*args, **kwargs)
 

@@ -103,5 +103,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# Other settings
+# Authentication urls
+LOGIN_URL = "/login"
 LOGIN_REDIRECT_URL = "/home"
+LOGOUT_REDIRECT_URL = "/login"
