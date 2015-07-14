@@ -30,6 +30,9 @@ class Checklist(BaseModel):
     created_by = models.ForeignKey(User, related_name='checklistsCreated')
     assigned_to = models.ForeignKey(User, related_name='checklistsAssigned')
 
+    def __str__(self):
+        return self.title
+
 class ChecklistItem(models.Model):
     description = models.CharField(max_length=500)
 

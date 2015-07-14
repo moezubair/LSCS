@@ -1,0 +1,37 @@
+{%  extends 'navbarbase.html' %}
+
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{%  block content %}
+    {% if user_checklist_list %}
+        <table class="table">
+            <tr>
+                <th>File #</th>
+                <th>Title</th>
+                <th>Manager</th>
+                <th>Surveyor</th>
+                <th>Status</th>
+                <th>Created</th>
+                <th>Updated At</th>
+            </tr>
+            {% for checklist in user_checklist_list %}
+            <tr>
+            <td>{{ checklist.file_number }}</td>
+                <td>
+                    <a href="{% url 'home' %}">{{ checklist }}</a>
+                </td>
+                <td>{{ checklist.created_by.username }}</td>
+                <td>{{ checklist.assigned_to.username }}</td>
+                <td>{{ checklist.status }}</td>
+                <td>{{ checklist.created_at }}</td>
+                <td>{{ checklist.updated_at }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No checklists are available.</p>
+    {% endif %}
+{% endblock content%}
+

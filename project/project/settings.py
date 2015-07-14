@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'lscs',
+    'bootstrap3',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -103,4 +104,4 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # Other settings
-LOGIN_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = "/home"

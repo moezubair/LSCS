@@ -1,6 +1,7 @@
 from django.conf.urls import url, include
-from lscs import views
+from . import views
 
 urlpatterns = [
+    url(r'^home/', views.HomeView.as_view(), name='home'),
     url(r'^login/', views.authenticate, name='login'),
 ]
