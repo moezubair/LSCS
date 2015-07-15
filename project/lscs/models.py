@@ -33,6 +33,9 @@ class Checklist(BaseModel):
     def __str__(self):
         return self.title
 
+    def get_status(self):
+        return [item[1] for item in Checklist.STATUS_TYPES if item[0] == self.status][0]
+
 class ChecklistItem(models.Model):
     description = models.CharField(max_length=500)
 

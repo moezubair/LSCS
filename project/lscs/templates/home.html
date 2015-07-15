@@ -19,11 +19,13 @@
             </tr>
             {% for checklist in user_checklist_list %}
             <tr>
-                <td>{{ checklist.file_number }}</td>
-                <td><a href="{% url 'checklist_detail' checklist.id %}">{{ checklist }}</a></td>
-                <td>{{ checklist.created_by.username }}</td>
-                <td>{{ checklist.assigned_to.username }}</td>
-                <td>{{ checklist.status }}</td>
+            <td>{{ checklist.file_number }}</td>
+                <td>
+                    <a href="{% url 'checklist_detail' %}">{{ checklist.id }}</a>
+                </td>
+                <td>{{ checklist.created_by.get_full_name }}</td>
+                <td>{{ checklist.assigned_to.get_full_name }}</td>
+                <td>{{ checklist.get_status }}</td>
                 <td>{{ checklist.created_at }}</td>
                 <td>{{ checklist.updated_at }}</td>
             </tr>
