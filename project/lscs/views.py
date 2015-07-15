@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from django.db.models import Q
+from django.forms import model_to_dict, fields_for_model
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
@@ -11,11 +12,11 @@ from django.views.decorators.http import require_http_methods
 
 from project import settings
 from .models import Checklist
+from .forms import ChecklistForm
 
 
 @require_http_methods(["GET", "POST"])
 def authenticate(request):
-
     if request.method == 'POST':
 
         auth_form = AuthenticationForm(request=request, data=request.POST)
@@ -65,4 +66,32 @@ class HomeView(generic.ListView):
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(HomeView, self).dispatch(*args, **kwargs)
+
+
+class ChecklistView(generic.FormView):
+    template_name = 'checklist_detail.html'
+    form_class = ChecklistForm
+    success_url = 'home'
+
+    # customize the context object that is passed to the template
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super(ChecklistView, self).get_context_data(**kwargs)
+
+        # get the instance of the form being processed
+        form = self.get_form(ChecklistForm)
+
+        # Set the field to be readonly
+        ''' TODO:
+            Set fields to be readonly based on the status of the checklist being updated and the type of user (surveyor or manager) '''
+        form.fields['title'].widget.attrs['readonly'] = True
+
+        # Update the context object
+        context['form'] = form
+        return context
+
+    # once the form is validated, save it (which in turn saves the new/updated model to the db)
+    def form_valid(self, form):
+        form.save()
+        return super(ChecklistView, self).form_valid(form)
 

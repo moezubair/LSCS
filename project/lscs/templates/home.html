@@ -7,6 +7,7 @@
 {%  block content %}
     {% if user_checklist_list %}
         <table class="table">
+            <caption><b>My Checklists</b></caption>
             <tr>
                 <th>File #</th>
                 <th>Title</th>
@@ -18,10 +19,8 @@
             </tr>
             {% for checklist in user_checklist_list %}
             <tr>
-            <td>{{ checklist.file_number }}</td>
-                <td>
-                    <a href="{% url 'home' %}">{{ checklist }}</a>
-                </td>
+                <td>{{ checklist.file_number }}</td>
+                <td><a href="{% url 'checklist_detail' checklist.id %}">{{ checklist }}</a></td>
                 <td>{{ checklist.created_by.username }}</td>
                 <td>{{ checklist.assigned_to.username }}</td>
                 <td>{{ checklist.status }}</td>
