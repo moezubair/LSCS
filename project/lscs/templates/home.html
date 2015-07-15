@@ -1,9 +1,5 @@
 {%  extends 'navbarbase.html' %}
 
-{% load bootstrap3 %}
-{% bootstrap_css %}
-{% bootstrap_javascript %}
-
 {%  block content %}
     {% if user_checklist_list %}
         <table class="table">
@@ -22,9 +18,9 @@
                 <td>
                     <a href="{% url 'home' %}">{{ checklist }}</a>
                 </td>
-                <td>{{ checklist.created_by.username }}</td>
-                <td>{{ checklist.assigned_to.username }}</td>
-                <td>{{ checklist.status }}</td>
+                <td>{{ checklist.created_by.get_full_name }}</td>
+                <td>{{ checklist.assigned_to.get_full_name }}</td>
+                <td>{{ checklist.get_status }}</td>
                 <td>{{ checklist.created_at }}</td>
                 <td>{{ checklist.updated_at }}</td>
             </tr>

@@ -4,8 +4,8 @@ from lscs.models import Checklist
 # Simple script to insert a test checklist
 # Attempts to create a test manager and surveyor user to fulfill the 'created_by' and 'assigned_to' fields
 def main():
-    test_manager = find_first_matching_user('testmanager', 'test')
-    test_surveyor = find_first_matching_user('testsurveyor', 'test')
+    test_manager = find_first_matching_user('testmanager', 'test', 'Test', 'Manager')
+    test_surveyor = find_first_matching_user('testsurveyor', 'test', 'Test', 'Surveyor')
 
     test_checklist = Checklist(
         title='Test Checklist',
@@ -20,12 +20,14 @@ def main():
     )
     test_checklist.save()
 
-def find_first_matching_user(username,password):
+def find_first_matching_user(username,password,first_name,last_name):
     matching_users = list(User.objects.filter(username=username)[:1])
 
     if not matching_users:
         test_user = User()
         test_user.username = username
+        test_user.first_name = first_name
+        test_user.last_name = last_name
         test_user.set_password(password)
         test_user.save()
         return test_user
