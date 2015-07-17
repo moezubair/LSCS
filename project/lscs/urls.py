@@ -8,4 +8,5 @@ urlpatterns = [
     url(r'^home/(?P<pk>[0-9]+)/$', views.ChecklistView.as_view(), name='checklist_detail'),
     url(r'^login/$', views.authenticate, name='login'),
     url(r"^logout/$", views.user_logout, name='logout'),
+    url(r'^create_checklist/$', views.CreateListView.as_view(), name='create_checklist')
 ]

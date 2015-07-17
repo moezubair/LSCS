@@ -1,0 +1,35 @@
+{%  extends 'navbarbase.html' %}
+
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{%  load static %}
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+{% block content %}
+    <form method="post"> {% csrf_token %}
+        <div class="container">
+            <div class="error">
+                {% if form.errors %}
+                <p>Please fill in all fields.</p>
+                {% endif %}
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    {{ form.as_ul }}
+                </div>
+                <div class="col-md-4">
+                    <img src="{%  static 'images/maps-victoria.jpg' %}" alt="Google Map" class="img-responsive"/>
+                    <div class="col-md-12">
+                        <h1>Weather Data</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <input type="submit"></input>
+            </div>
+        </div>
+    </form>
+{% endblock content %}

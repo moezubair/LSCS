@@ -95,3 +95,53 @@ class ChecklistView(generic.FormView):
         form.save()
         return super(ChecklistView, self).form_valid(form)
 
+class CreateListView(generic.FormView):
+    template_name = 'create_checklist.html'
+    form_class = ChecklistForm
+    success_url = '#'
+
+    def get_queryset(self):
+
+        # get the instance of the form being processed
+        form = self.get_form(ChecklistForm)
+
+        # Update the context object
+        context['form'] = form
+        return context
+
+    def form_valid(self, form):
+        user = find_first_matching_user('testmanager', 'test', 'Test', 'Manager')
+        test_surveyor = find_first_matching_user('testsurveyor', 'test', 'Test', 'Surveyor')
+
+        test_checklist = Checklist(
+            title='Test Checklist',
+            description='this is a test checklist',
+            file_number=123,
+            land_district='land district test',
+            latitude=1.23,
+            longitude=1.23,
+            status=Checklist.COMPLETED,
+            created_by=user,
+            assigned_to=test_surveyor
+        )
+        test_checklist.save()
+
+    # Restrict access to this view to logged in users:
+    #     https://docs.djangoproject.com/en/1.8/topics/class-based-views/intro/#decorating-the-class
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(CreateListView, self).dispatch(*args, **kwargs)
+
+def find_first_matching_user(username,password,first_name,last_name):
+    matching_users = list(User.objects.filter(username=username)[:1])
+
+    if not matching_users:
+        test_user = User()
+        test_user.username = username
+        test_user.first_name = first_name
+        test_user.last_name = last_name
+        test_user.set_password(password)
+        test_user.save()
+        return test_user
+    else:
+        return matching_users[0]

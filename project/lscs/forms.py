@@ -7,4 +7,3 @@ class ChecklistForm(ModelForm):
     class Meta:
         model = Checklist
         exclude = ['id']
-

@@ -34,5 +34,5 @@
     {% else %}
         <p>No checklists are available.</p>
     {% endif %}
+    <a href="{% url 'create_checklist' %}">{{ 'Create Checklist' }}</a>
 {% endblock content%}
-
