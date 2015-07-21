@@ -1,4 +1,5 @@
 from django.conf.urls import url, include
+from django.contrib import admin
 from . import views
 from django.views.generic import RedirectView
 
@@ -8,4 +9,5 @@ urlpatterns = [
     url(r'^home/(?P<pk>[0-9]+)/$', views.ChecklistView.as_view(), name='checklist_detail'),
     url(r'^login/$', views.authenticate, name='login'),
     url(r"^logout/$", views.user_logout, name='logout'),
+    url(r"^admin/", include(admin.site.urls)),
 ]
