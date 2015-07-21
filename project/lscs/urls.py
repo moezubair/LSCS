@@ -2,7 +2,7 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from . import views
 from django.views.generic import RedirectView
-
+admin.autodiscover()
 urlpatterns = [
     url(r'^$', RedirectView.as_view(url='home', permanent=False)),
     url(r'^home/$', views.HomeView.as_view(), name='home'),
