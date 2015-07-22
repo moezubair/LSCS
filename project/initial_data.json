@@ -1,0 +1,38 @@
+[
+  {
+    "model": "lscs.ChecklistItemGroup",
+    "pk": 1,
+    "fields": {
+      "title": "Plan Title"
+    }
+  },
+    {
+    "model": "lscs.ChecklistItemGroup",
+    "pk": 2,
+    "fields": {
+      "title": "Main Body of Plan"
+    }
+
+  },
+   {
+    "model": "lscs.ChecklistItemGroup",
+    "pk": 3,
+    "fields": {
+      "title": "Scenery"
+    }
+  },
+   {
+    "model": "lscs.ChecklistItemGroup",
+    "pk": 4,
+    "fields": {
+      "title": "Integrated Survey Area"
+    }
+  },
+     {
+    "model": "lscs.ChecklistItemGroup",
+    "pk": 5,
+    "fields": {
+      "title": "Miscellaneous"
+    }
+  }
+]

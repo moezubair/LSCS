@@ -19,7 +19,8 @@ def main():
         assigned_to=test_surveyor
     )
 
-    # Add all the questions
+    # Add the groups
+
     test_checklist.save()
 
 def find_first_matching_user(username,password,first_name,last_name):
