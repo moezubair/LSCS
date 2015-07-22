@@ -84,7 +84,7 @@ class ChecklistView(generic.FormView):
         # Set the field to be readonly
         ''' TODO:
             Set fields to be readonly based on the status of the checklist being updated and the type of user (surveyor or manager) '''
-        
+
         form.fields['title'].widget.attrs['readonly'] = True
 
         # Update the context object

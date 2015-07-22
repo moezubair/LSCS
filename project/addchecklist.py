@@ -18,6 +18,8 @@ def main():
         created_by=test_manager,
         assigned_to=test_surveyor
     )
+
+    # Add all the questions
     test_checklist.save()
 
 def find_first_matching_user(username,password,first_name,last_name):

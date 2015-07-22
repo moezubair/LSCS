@@ -36,8 +36,13 @@ class Checklist(BaseModel):
     def get_status(self):
         return [item[1] for item in Checklist.STATUS_TYPES if item[0] == self.status][0]
 
+class ChecklistItemGroup(models.Model):
+    title = models.CharField(max_length=100)
+
 class ChecklistItem(models.Model):
     description = models.CharField(max_length=500)
+    group = models.ForeignKey(ChecklistItemGroup,related_name='checklistItems')
+
 
 class ChecklistItemSelection(BaseModel):
 
