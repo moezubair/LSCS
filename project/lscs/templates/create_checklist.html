@@ -1,0 +1,25 @@
+{%  extends 'navbarbase.html' %}
+
+{% load bootstrap3 %}
+
+{% block bootstrap3_title %}Create Checklist{% endblock %}
+
+{% block content %}
+    <form method="post"> {% csrf_token %}
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <h1>Create Checklist</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    {% bootstrap_form form %}
+                </div>
+            </div>
+            <div class="row">
+                {% bootstrap_button content="Create" button_type="submit" %}
+            </div>
+        </div>
+    </form>
+{% endblock content %}

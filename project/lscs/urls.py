@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^login/$', views.authenticate, name='login'),
     url(r"^logout/$", views.user_logout, name='logout'),
     url(r"^admin/", include(admin.site.urls)),
+    url(r'^create_checklist/$', views.CreateChecklistView.as_view(), name='create_checklist'),
 ]

@@ -4,6 +4,8 @@
 {% bootstrap_css %}
 {% bootstrap_javascript %}
 
+{% block bootstrap3_title %}Home{% endblock %}
+
 {%  block content %}
     {% if user_checklist_list %}
         <table class="table">
@@ -34,5 +36,6 @@
     {% else %}
         <p>No checklists are available.</p>
     {% endif %}
+    <a href="{% url 'create_checklist' %}" type="submit" class="btn btn-primary">Create Checklist</a>
 {% endblock content%}
 

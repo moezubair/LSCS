@@ -12,7 +12,7 @@ from django.views.decorators.http import require_http_methods
 
 from project import settings
 from .models import Checklist
-from .forms import ChecklistForm
+from .forms import ChecklistForm, CreateChecklistForm
 
 
 @require_http_methods(["GET", "POST"])
@@ -96,3 +96,19 @@ class ChecklistView(generic.FormView):
         form.save()
         return super(ChecklistView, self).form_valid(form)
 
+class CreateChecklistView(generic.FormView):
+
+    template_name = 'create_checklist.html'
+    form_class = CreateChecklistForm
+    success_url = '/home/'
+
+    def form_valid(self, form):
+
+        checklist = form.instance
+
+        checklist.created_by = self.request.user
+        checklist.status = Checklist.IN_PROGRESS
+
+        checklist.save()
+
+        return super(CreateChecklistView, self).form_valid(form)
