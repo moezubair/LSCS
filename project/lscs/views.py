@@ -12,7 +12,7 @@ from django.views.decorators.http import require_http_methods
 
 from project import settings
 from .models import Checklist
-from .forms import ChecklistForm, CreateChecklistForm
+from .forms import EditChecklistForm, CreateChecklistForm
 
 
 @require_http_methods(["GET", "POST"])
@@ -68,33 +68,64 @@ class HomeView(generic.ListView):
         return super(HomeView, self).dispatch(*args, **kwargs)
 
 
-class ChecklistView(generic.FormView):
+class EditChecklistView(generic.UpdateView):
     template_name = 'checklist_detail.html'
-    form_class = ChecklistForm
+    model = Checklist
+    form_class = EditChecklistForm
     success_url = 'home'
 
-    # customize the context object that is passed to the template
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
-        context = super(ChecklistView, self).get_context_data(**kwargs)
+        context = super(EditChecklistView, self).get_context_data(**kwargs)
 
         # get the instance of the form being processed
-        form = self.get_form(ChecklistForm)
+        form = self.get_form(EditChecklistForm)
 
-        # Set the field to be readonly
-        ''' TODO:
-            Set fields to be readonly based on the status of the checklist being updated and the type of user (surveyor or manager) '''
+        # get instance of checklist being updated
+        checklist = self.object
 
-        form.fields['title'].widget.attrs['readonly'] = True
+        # check if the current user is a manager
+        user = self.request.user
+        manager_group = user.groups.filter(name="Manager")
+
+        # if the user is not a manager, restrict edibility of certain fields
+        if manager_group.count() == 0:
+            # check the checklist's status (in_progress doesn't change edibility)
+            if checklist.status == checklist.UNDER_REVIEW:
+                self.set_fields_readonly(form)
+                self.hide_choice_fields(form)
+            elif checklist.status == checklist.COMPLETED:
+                self.set_fields_readonly(form)
+                self.hide_choice_fields(form)
 
         # Update the context object
         context['form'] = form
         return context
 
-    # once the form is validated, save it (which in turn saves the new/updated model to the db)
-    def form_valid(self, form):
-        form.save()
-        return super(ChecklistView, self).form_valid(form)
+    def set_fields_readonly(self, form):
+        checklist_fields = [
+            'title',
+            'description',
+            'file_number',
+            'land_district',
+            'latitude',
+            'longitude',
+        ]
+        for key, value in form.fields.items():
+            for field in checklist_fields:
+                if key == field:
+                    form.fields[key].widget.attrs['readonly'] = True
+
+    def hide_choice_fields(self, form):
+        checklist_choice_fields = [
+            'status',
+            'created_by',
+            'assigned_to',
+        ]
+        for key, value in form.fields.items():
+            for field in checklist_choice_fields:
+                if key == field:
+                    form.fields[key].widget.attrs['disabled'] = 'disabled'
 
 class CreateChecklistView(generic.FormView):
 
