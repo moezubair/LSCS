@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User, AbstractBaseUser
 from django.db import models
 
+
 class BaseModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -8,8 +9,8 @@ class BaseModel(models.Model):
     class Meta:
         abstract = True
 
-class Checklist(BaseModel):
 
+class Checklist(BaseModel):
     IN_PROGRESS = 1
     UNDER_REVIEW = 2
     COMPLETED = 3
@@ -24,8 +25,8 @@ class Checklist(BaseModel):
     description = models.CharField(max_length=500)
     file_number = models.CharField(max_length=30)
     land_district = models.CharField(max_length=50)
-    latitude = models.DecimalField (max_digits=8, decimal_places=3)
-    longitude = models.DecimalField (max_digits=8, decimal_places=3)
+    latitude = models.DecimalField(max_digits=8, decimal_places=3)
+    longitude = models.DecimalField(max_digits=8, decimal_places=3)
     status = models.IntegerField(choices=STATUS_TYPES)
     created_by = models.ForeignKey(User, related_name='checklistsCreated')
     assigned_to = models.ForeignKey(User, related_name='checklistsAssigned')
@@ -36,19 +37,23 @@ class Checklist(BaseModel):
     def get_status(self):
         return [item[1] for item in Checklist.STATUS_TYPES if item[0] == self.status][0]
 
+
 class ChecklistItemGroup(models.Model):
     title = models.CharField(max_length=100)
+
     def __str__(self):
         return self.title
 
+
 class ChecklistItem(models.Model):
     description = models.CharField(max_length=500)
-    group = models.ForeignKey(ChecklistItemGroup,related_name='checklistItems')
+    group = models.ForeignKey(ChecklistItemGroup, related_name='checklistItems')
+
     def __str__(self):
         return self.description
 
-class ChecklistItemSelection(BaseModel):
 
+class ChecklistItemSelection(BaseModel):
     UNANSWERED = 1
     YES = 2
     NOT_APPLICABLE = 3
@@ -63,6 +68,7 @@ class ChecklistItemSelection(BaseModel):
     checklist = models.ForeignKey(Checklist, related_name='itemSelections')
     checklistItem = models.ForeignKey(ChecklistItem)
     created_by = models.ForeignKey(User)
+
 
 class ChecklistComment(models.Model):
     text = models.TextField()

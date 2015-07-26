@@ -61,6 +61,16 @@ class HomeView(generic.ListView):
         sorted_list = sorted(user_checklists, key=lambda checklist: checklist.updated_at, reverse=True)
         return sorted_list
 
+    def post(self, request, *args, **kwargs):
+        # check if a request to delete a checklist was made
+        if 'delete' in request.POST:
+            # get the checklist from the POST request and delete it
+            checklist_id = request.POST.get('delete')
+            checklist = Checklist.objects.get(id=checklist_id)
+            checklist.delete()
+        # refresh the page regardless
+        return HttpResponseRedirect('/home/')
+
     # Restrict access to this view to logged in users:
     #     https://docs.djangoproject.com/en/1.8/topics/class-based-views/intro/#decorating-the-class
     @method_decorator(login_required)
@@ -72,7 +82,7 @@ class EditChecklistView(generic.UpdateView):
     template_name = 'checklist_detail.html'
     model = Checklist
     form_class = EditChecklistForm
-    success_url = 'home'
+    success_url = '/home/'
 
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
@@ -101,6 +111,14 @@ class EditChecklistView(generic.UpdateView):
         # Update the context object
         context['form'] = form
         return context
+
+    def form_valid(self, form):
+
+        checklist = form.instance
+
+        checklist.save()
+
+        return super(EditChecklistView, self).form_valid(form)
 
     def set_fields_readonly(self, form):
         checklist_fields = [
