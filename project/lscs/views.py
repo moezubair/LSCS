@@ -102,13 +102,8 @@ class EditChecklistView(generic.UpdateView):
 
         # if the user is not a manager, restrict edibility of certain fields
         if manager_group.count() == 0:
-            # check the checklist's status (in_progress doesn't change edibility)
-            if checklist.status == checklist.UNDER_REVIEW:
-                self.set_fields_readonly(form)
-                self.hide_choice_fields(form)
-            elif checklist.status == checklist.COMPLETED:
-                self.set_fields_readonly(form)
-                self.hide_choice_fields(form)
+            self.set_fields_readonly(form)
+            self.hide_choice_fields(form)
         #Get the Weather
         weatherService = "http://api.openweathermap.org/data/2.5/weather?units=metric&lat="+str(checklist.latitude)+"&lon="+str(checklist.longitude)
         weatherStream = urllib.request.urlopen(weatherService)
