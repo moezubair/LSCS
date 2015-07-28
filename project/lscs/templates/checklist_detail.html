@@ -19,6 +19,28 @@
                     <img src="{%  static 'images/maps-victoria.jpg' %}" alt="Google Map" class="img-responsive"/>
                     <div class="col-md-12">
                         <h1>Weather Data</h1>
+                        <div class="table-container">
+                        <table class="table table-compact table-bordered">
+
+                            <tr>
+                                <td>Temperature</td>
+                                <td>{{ weather.temp }} Celsius</td>
+                            </tr>
+                            <tr>
+                                <td>Forcasted Range</td>
+                                <td>{{ weather.min }} to {{ weather.max }} Celsius</td>
+                            </tr>
+                            <tr>
+                                <td>Humidity</td>
+                                <td>{{ weather.humidity }}%</td>
+                            </tr>
+                            <tr>
+                                <td>Atmospheric Pressure</td>
+                                <td>{{ weather.pressure }} hPA</td>
+                            </tr>
+                        </table>
+                            </div>
+
                     </div>
                 </div>
             </div>

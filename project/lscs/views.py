@@ -13,7 +13,8 @@ from django.views.decorators.http import require_http_methods
 from project import settings
 from .models import Checklist
 from .forms import EditChecklistForm, CreateChecklistForm
-
+import urllib.request
+import json
 
 @require_http_methods(["GET", "POST"])
 def authenticate(request):
@@ -85,6 +86,7 @@ class EditChecklistView(generic.UpdateView):
     success_url = '/home/'
 
     def get_context_data(self, **kwargs):
+        temperature = {}
         # Call the base implementation first to get a context
         context = super(EditChecklistView, self).get_context_data(**kwargs)
 
@@ -107,9 +109,22 @@ class EditChecklistView(generic.UpdateView):
             elif checklist.status == checklist.COMPLETED:
                 self.set_fields_readonly(form)
                 self.hide_choice_fields(form)
-
+        #Get the Weather
+        weatherService = "http://api.openweathermap.org/data/2.5/weather?units=metric&lat="+str(checklist.latitude)+"&lon="+str(checklist.longitude)
+        weatherStream = urllib.request.urlopen(weatherService)
+        try:
+            json_result = weatherStream.read()
+            parsed_json = json.loads(json_result.decode())
+            temperature['min'] = parsed_json['main']['temp_min']
+            temperature['max'] = parsed_json['main']['temp_max']
+            temperature['humidity'] = parsed_json['main']['humidity']
+            temperature['temp'] = parsed_json['main']['temp']
+            temperature['pressure'] = parsed_json['main']['pressure']
+        except Exception as e:
+            temperature = "Weather API Not available"+str(e)
         # Update the context object
         context['form'] = form
+        context['weather'] = temperature
         return context
 
     def form_valid(self, form):
@@ -144,6 +159,7 @@ class EditChecklistView(generic.UpdateView):
             for field in checklist_choice_fields:
                 if key == field:
                     form.fields[key].widget.attrs['disabled'] = 'disabled'
+  #  def getWeather(self, form):
 
 class CreateChecklistView(generic.FormView):
 
