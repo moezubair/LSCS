@@ -25,14 +25,489 @@
     "model": "lscs.ChecklistItemGroup",
     "pk": 4,
     "fields": {
+      "title": "Deposit Statement"
+    }
+  },
+   {
+    "model": "lscs.ChecklistItemGroup",
+    "pk": 5,
+    "fields": {
       "title": "Integrated Survey Area"
     }
   },
      {
     "model": "lscs.ChecklistItemGroup",
-    "pk": 5,
+    "pk": 6,
     "fields": {
       "title": "Miscellaneous"
     }
-  }
+  },
+   {
+    "model": "lscs.ChecklistItemGroup",
+    "pk": 7,
+    "fields": {
+      "title": "Electronic Plan"
+    }
+  },
+
+     {
+	"model": "lscs.ChecklistItem",
+	"pk":1 ,
+	"fields": {
+	"description": "Type of Plan ",
+	"group": 1
+
+	}
+},
+     {
+	"model": "lscs.ChecklistItem",
+	"pk":2 ,
+	"fields": {
+	"description": "Legal Description & registered plan no.",
+	"group": 1
+
+	}
+},
+     {
+	"model": "lscs.ChecklistItem",
+	"pk":3 ,
+	"fields": {
+	"description": "BCGS NO.",
+	"group": 1
+
+	}
+},
+     {
+	"model": "lscs.ChecklistItem",
+	"pk":4 ,
+	"fields": {
+	"description": "Appropriate Scale & Bar, including intended plot size",
+	"group": 1
+
+	}
+},
+     {
+	"model": "lscs.ChecklistItem",
+	"pk":5 ,
+	"fields": {
+	"description": "Legend explaining all symbols and non-standard abbreviations",
+	"group": 1
+
+	}
+},
+     {
+	"model": "lscs.ChecklistItem",
+	"pk":6 ,
+	"fields": {
+	"description": "Bearing derivation and reference",
+	"group": 1
+
+	}
+},
+     {
+	"model": "lscs.ChecklistItem",
+	"pk":7 ,
+	"fields": {
+	"description": "Notation: bearings to BTs are magnetic or planned bearings",
+	"group": 1
+
+	}
+},
+     {
+	"model": "lscs.ChecklistItem",
+	"pk":8 ,
+	"fields": {
+	"description": "North Point",
+	"group": 1
+
+	}
+},
+     {
+	"model": "lscs.ChecklistItem",
+	"pk":9 ,
+	"fields": {
+	"description": "Appropriate designation for title or Interest parcels (e.g. Lot Number)",
+	"group": 2
+
+	}
+},
+     {
+	"model": "lscs.ChecklistItem",
+	"pk":10 ,
+	"fields": {
+	"description": "All essential dimensions given and closure calculated",
+	"group": 2
+
+	}
+},
+     {
+	"model": "lscs.ChecklistItem",
+	"pk":11 ,
+	"fields": {
+	"description": "Title & Interest Parcel Area or Volume correct & to required precision-GSI Rule 3",
+	"group": 2
+
+	}
+},
+     {
+	"model": "lscs.ChecklistItem",
+	"pk":12 ,
+	"fields": {
+	"description": "Boundaries reestablished and/or lots divided in accordance with Land Survey Act",
+	"group": 2
+
+	}
+},
+     {
+	"model": "lscs.ChecklistItem",
+	"pk":13 ,
+	"fields": {
+	"description": "Sufficient ties to evidence of previous surveys",
+	"group": 2
+
+	}
+},
+     {
+	"model": "lscs.ChecklistItem",
+	"pk":14 ,
+	"fields": {
+	"description": "Monumentation labelled and correct - GSI Rule 1-2 to 1-7",
+	"group": 2
+
+	}
+},
+     {
+	"model": "lscs.ChecklistItem",
+	"pk":15 ,
+	"fields": {
+	"description": "Read or “Lane” and name, when available, where road is being dedicated",
+	"group": 2
+
+	}
+},
+     {
+	"model": "lscs.ChecklistItem",
+	"pk":16 ,
+	"fields": {
+	"description": "Remember to check for hooked parcels, part parcels and remainders",
+	"group": 2
+
+	}
+},
+     {
+	"model": "lscs.ChecklistItem",
+	"pk":17 ,
+	"fields": {
+	"description": "New Dedicated Road or RW fully dimensioned with widths indicated-GSI Rule",
+	"group": 2
+
+	}
+},
+     {
+	"model": "lscs.ChecklistItem",
+	"pk":18 ,
+	"fields": {
+	"description": "No text less than 2mm",
+	"group": 2
+
+	}
+},
+     {
+	"model": "lscs.ChecklistItem",
+	"pk":19 ,
+	"fields": {
+	"description": "Plotting to scale and drafting legible - GSI Rule 3-2 & 3-3",
+	"group": 2
+
+	}
+},
+     {
+	"model": "lscs.ChecklistItem",
+	"pk":20 ,
+	"fields": {
+	"description": "Bold outline 1.0 - 1.5 mm centered on boundary (including any detail drawings)",
+	"group": 2
+
+	}
+},
+     {
+	"model": "lscs.ChecklistItem",
+	"pk":21 ,
+	"fields": {
+	"description": "Existing R/W, Easement or Covenant boundaries shown with broken lines - GSI Rule 3-4",
+	"group": 2
+
+	}
+},
+     {
+	"model": "lscs.ChecklistItem",
+	"pk":22 ,
+	"fields": {
+	"description": "Details of bearing trees and ancillary evidence found and made - GSI Rule 3-4",
+	"group": 2
+
+	}
+},
+     {
+	"model": "lscs.ChecklistItem",
+	"pk":23 ,
+	"fields": {
+	"description": "Radius, arc, radial bearings for each curve point - GSI Rule 3-4",
+	"group": 2
+
+	}
+},
+     {
+	"model": "lscs.ChecklistItem",
+	"pk":24 ,
+	"fields": {
+	"description": "Railway plan in un-surveyed land has district lot number assigned",
+	"group": 2
+
+	}
+},
+     {
+	"model": "lscs.ChecklistItem",
+	"pk":25 ,
+	"fields": {
+	"description": "Access to water body where applicable - LTA s75(1)",
+	"group": 2
+
+	}
+},
+     {
+	"model": "lscs.ChecklistItem",
+	"pk":26 ,
+	"fields": {
+	"description": "Label Un-surveyed Crown Land including theoretical or unsurveyed portions of townships",
+	"group": 2
+
+	}
+},
+     {
+	"model": "lscs.ChecklistItem",
+	"pk":27 ,
+	"fields": {
+	"description": "Check status of adjacent roads. Have they all been dedicated?",
+	"group": 3
+
+	}
+},
+     {
+	"model": "lscs.ChecklistItem",
+	"pk":28 ,
+	"fields": {
+	"description": "Parcel boundaries (incl. highway, roads and railway) shown with solid lines - Rule 3-4(2)(g)",
+	"group": 3
+
+	}
+},
+     {
+	"model": "lscs.ChecklistItem",
+	"pk":29 ,
+	"fields": {
+	"description": "Description(s) given for all surrounding lands - GSI Rule 3-4(1)(r)",
+	"group": 3
+
+	}
+},
+     {
+	"model": "lscs.ChecklistItem",
+	"pk":30 ,
+	"fields": {
+	"description": "Primary parcel designations prominent in body of plan (use 'DL' not 'Lot') - Rule 10-14",
+	"group": 3
+
+	}
+},
+     {
+	"model": "lscs.ChecklistItem",
+	"pk":31 ,
+	"fields": {
+	"description": "Existing Road Names shown - GSI Rule 3-4",
+	"group": 3
+
+	}
+},
+     {
+	"model": "lscs.ChecklistItem",
+	"pk":32 ,
+	"fields": {
+	"description": "Roads, Trails, and Seismic Lines shown and labelled with width and posted as required",
+	"group": 3
+
+	}
+},
+     {
+	"model": "lscs.ChecklistItem",
+	"pk":33 ,
+	"fields": {
+	"description": "'Rem' added on lot and \"portion of\" or \"part of\" in title where appropriate",
+	"group": 3
+
+	}
+},
+     {
+	"model": "lscs.ChecklistItem",
+	"pk":34 ,
+	"fields": {
+	"description": "Plan lies within (Regional District) statement - GSI Rule 3-4",
+	"group": 4
+
+	}
+},
+     {
+	"model": "lscs.ChecklistItem",
+	"pk":35 ,
+	"fields": {
+	"description": "Leave 7 cm 12 cm clear space in top right corner for Registrar's notation pursuant to S 56 LTA",
+	"group": 4
+
+	}
+},
+     {
+	"model": "lscs.ChecklistItem",
+	"pk":36 ,
+	"fields": {
+	"description": "Grid bearing notation; ISA name and number, datum and bearing derivation - GSI Rule 5-7",
+	"group": 5
+
+	}
+},
+     {
+	"model": "lscs.ChecklistItem",
+	"pk":37 ,
+	"fields": {
+	"description": "Control monuments tied in accordance with GSI Rules 5-4(2)",
+	"group": 5
+
+	}
+},
+     {
+	"model": "lscs.ChecklistItem",
+	"pk":38 ,
+	"fields": {
+	"description": "Meets accuracy standards of integrated legal survey - GSI Rule 5-4 (3) & (4)",
+	"group": 5
+
+	}
+},
+     {
+	"model": "lscs.ChecklistItem",
+	"pk":39 ,
+	"fields": {
+	"description": "Control monuments shown on plan with required symbol and respective designation - GSI Rule 5-7(2)",
+	"group": 5
+
+	}
+},
+     {
+	"model": "lscs.ChecklistItem",
+	"pk":40 ,
+	"fields": {
+	"description": "Spelling check",
+	"group": 6
+
+	}
+},
+     {
+	"model": "lscs.ChecklistItem",
+	"pk":41 ,
+	"fields": {
+	"description": "Standard plan size - GSI Rule 3-1",
+	"group": 6
+
+	}
+},
+     {
+	"model": "lscs.ChecklistItem",
+	"pk":42 ,
+	"fields": {
+	"description": "If practical, top of plan orientated north - GSI Rule 3-3(5)",
+	"group": 6
+
+	}
+},
+     {
+	"model": "lscs.ChecklistItem",
+	"pk":43 ,
+	"fields": {
+	"description": "Notation regarding existing records that plan is compiled from.",
+	"group": 6
+
+	}
+},
+     {
+	"model": "lscs.ChecklistItem",
+	"pk":44 ,
+	"fields": {
+	"description": "Type of Plan ",
+	"group": 7
+
+	}
+},
+     {
+	"model": "lscs.ChecklistItem",
+	"pk":45 ,
+	"fields": {
+	"description": "Legal Description & registered plan no.",
+	"group": 7
+
+	}
+},
+     {
+	"model": "lscs.ChecklistItem",
+	"pk":46 ,
+	"fields": {
+	"description": "BCGS NO.",
+	"group": 7
+
+	}
+},
+     {
+	"model": "lscs.ChecklistItem",
+	"pk":47 ,
+	"fields": {
+	"description": "Appropriate Scale & Bar, including intended plot size",
+	"group": 7
+
+	}
+},
+     {
+	"model": "lscs.ChecklistItem",
+	"pk":48 ,
+	"fields": {
+	"description": "Legend explaining all symbols and non-standard abbreviations",
+	"group": 7
+
+	}
+},
+     {
+	"model": "lscs.ChecklistItem",
+	"pk":49 ,
+	"fields": {
+	"description": "Bearing derivation and reference",
+	"group": 7
+
+	}
+},
+     {
+	"model": "lscs.ChecklistItem",
+	"pk":50 ,
+	"fields": {
+	"description": "Notation: bearings to BTs are magnetic or planned bearings",
+	"group": 7
+
+	}
+},
+     {
+	"model": "lscs.ChecklistItem",
+	"pk":51 ,
+	"fields": {
+	"description": "North Point",
+	"group": 7
+
+	}
+}
+
 ]
