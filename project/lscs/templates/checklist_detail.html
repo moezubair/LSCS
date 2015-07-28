@@ -9,17 +9,27 @@
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
 {% block content %}
-    <div class="container">
-        <div class="row">
-            <div class="col-md-8">
-                {% bootstrap_form form %}
-            </div>
-            <div class="col-md-4">
-                <img src="{%  static 'images/maps-victoria.jpg' %}" alt="Google Map" class="img-responsive"/>
-                <div class="col-md-12">
-                    <h1>Weather Data</h1>
+    <form method="post"> {% csrf_token %}
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    {% bootstrap_form form %}
+                </div>
+                <div class="col-md-4">
+                    <img src="{%  static 'images/maps-victoria.jpg' %}" alt="Google Map" class="img-responsive"/>
+                    <div class="col-md-12">
+                        <h1>Weather Data</h1>
+                    </div>
                 </div>
             </div>
+            <div class="row">
+                {%  buttons %}
+                <button type="submit" name="save" class="btn btn-primary">Save Changes</button>
+                <button type="reset" class="btn btn-info">Undo Changes</button>
+                <a role="button" class="btn btn-info" href="{% url 'home' %}">Cancel</a>
+                {% endbuttons %}
+
+            </div>
         </div>
-    </div>
+    </form>
 {% endblock content %}

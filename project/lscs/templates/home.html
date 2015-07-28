@@ -18,6 +18,7 @@
                 <th>Status</th>
                 <th>Created</th>
                 <th>Updated At</th>
+                <th>Delete</th>
             </tr>
             {% for checklist in user_checklist_list %}
             <tr>
@@ -30,6 +31,15 @@
                 <td>{{ checklist.get_status }}</td>
                 <td>{{ checklist.created_at }}</td>
                 <td>{{ checklist.updated_at }}</td>
+                <form method="post"> {% csrf_token %}
+                    {% for group in user.groups.all %}
+                        {% if group.name == 'Manager' %}
+                            <td><button type="submit" name="delete" class="btn btn-danger" value="{{ checklist.id }}">Delete</button></td>
+                        {% else %}
+                            <td>N/A</td>
+                        {% endif %}
+                    {% endfor %}
+                </form>
             </tr>
             {% endfor %}
         </table>
