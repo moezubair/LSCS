@@ -13,12 +13,17 @@
             <tr>
                 <th>File #</th>
                 <th>Title</th>
-                <th>Manager</th>
+                {% if user_type == "Manager" %}
                 <th>Surveyor</th>
+                {% else %}
+                <th>Manager</th>
+                {% endif %}
                 <th>Status</th>
                 <th>Created</th>
                 <th>Updated At</th>
+                {% if user_type == "Manager" %}
                 <th>Delete</th>
+                {% endif %}
             </tr>
             {% for checklist in user_checklist_list %}
             <tr>
@@ -26,26 +31,27 @@
                 <td>
                     <a href="{% url 'checklist_detail' checklist.id %}">{{ checklist }}</a>
                 </td>
-                <td>{{ checklist.created_by.get_full_name }}</td>
+                {% if user_type == "Manager" %}
                 <td>{{ checklist.assigned_to.get_full_name }}</td>
+                {% else %}
+                <td>{{ checklist.created_by.get_full_name }}</td>
+                {% endif %}
                 <td>{{ checklist.get_status }}</td>
                 <td>{{ checklist.created_at }}</td>
                 <td>{{ checklist.updated_at }}</td>
+                {% if user_type == "Manager" %}
                 <form method="post"> {% csrf_token %}
-                    {% for group in user.groups.all %}
-                        {% if group.name == 'Manager' %}
-                            <td><button type="submit" name="delete" class="btn btn-danger" value="{{ checklist.id }}">Delete</button></td>
-                        {% else %}
-                            <td>N/A</td>
-                        {% endif %}
-                    {% endfor %}
+                    <td><button type="submit" name="delete" class="btn btn-danger" value="{{ checklist.id }}">Delete</button></td>
                 </form>
+                {% endif %}
             </tr>
             {% endfor %}
         </table>
     {% else %}
         <p>No checklists are available.</p>
     {% endif %}
+    {% if user_type == "Manager" %}
     <a href="{% url 'create_checklist' %}" type="submit" class="btn btn-primary">Create Checklist</a>
+    {% endif %}
 {% endblock content%}
 
