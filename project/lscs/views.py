@@ -16,6 +16,18 @@ from .forms import EditChecklistForm, CreateChecklistForm
 import urllib.request
 import json
 
+def get_user_type(user):
+
+    # We default to surveyor if they are not a manager (for now). Should clean this up to logout user if they are not either
+    # Should also clean up user_type to use an enum or constant rather than a string
+
+    if user.groups.filter(name="Manager").count() > 0:
+        user_type = "Manager"
+    else:
+        user_type = "Surveyor"
+
+    return user_type
+
 @require_http_methods(["GET", "POST"])
 def authenticate(request):
     if request.method == 'POST':
@@ -55,22 +67,46 @@ class HomeView(generic.ListView):
         # get reference to the user accessing the view
         user = self.request.user
 
+        user_type = get_user_type(user)
+
         # get the set of checklists created by this user or assigned to this user
-        user_checklists = Checklist.objects.all().filter(Q(created_by=user) | Q(assigned_to=user))
+        if user_type == "Manager":
+            user_checklists = user.checklistsCreated.all()
+        else:
+            user_checklists = user.checklistsAssigned.all()
 
         # sort the set by date updated most recently
         sorted_list = sorted(user_checklists, key=lambda checklist: checklist.updated_at, reverse=True)
         return sorted_list
 
     def post(self, request, *args, **kwargs):
+
+        user_type = get_user_type(request.user)
+
         # check if a request to delete a checklist was made
-        if 'delete' in request.POST:
+        if user_type == "Manager" and 'delete' in request.POST:
             # get the checklist from the POST request and delete it
             checklist_id = request.POST.get('delete')
             checklist = Checklist.objects.get(id=checklist_id)
             checklist.delete()
+
         # refresh the page regardless
         return HttpResponseRedirect('/home/')
+
+
+    def get_context_data(self, **kwargs):
+
+        # Call the base implementation first to get a context
+        context = super(HomeView, self).get_context_data(**kwargs)
+
+        # get the instance of the form being processed
+        #form = self.get_form(HomeView)
+
+        # check if the current user is a manager
+        user = self.request.user
+
+        context['user_type'] = get_user_type(user)
+        return context
 
     # Restrict access to this view to logged in users:
     #     https://docs.djangoproject.com/en/1.8/topics/class-based-views/intro/#decorating-the-class
@@ -98,12 +134,12 @@ class EditChecklistView(generic.UpdateView):
 
         # check if the current user is a manager
         user = self.request.user
-        manager_group = user.groups.filter(name="Manager")
 
         # if the user is not a manager, restrict edibility of certain fields
-        if manager_group.count() == 0:
+        if get_user_type(user) != "Manager":
             self.set_fields_readonly(form)
             self.hide_choice_fields(form)
+
         #Get the Weather
         weatherService = "http://api.openweathermap.org/data/2.5/weather?units=metric&lat="+str(checklist.latitude)+"&lon="+str(checklist.longitude)
         #Acces weather data from weather service
@@ -174,3 +210,23 @@ class CreateChecklistView(generic.FormView):
         checklist.save()
 
         return super(CreateChecklistView, self).form_valid(form)
+
+    def get(self, request, *args, **kwargs):
+
+        user_type = get_user_type(request.user)
+
+        # Make sure we're a manager
+        if user_type == "Manager":
+            return super(CreateChecklistView, self).get(request, **kwargs)
+        else:
+            return HttpResponseRedirect('/home/')
+
+    def post(self, request, *args, **kwargs):
+
+        user_type = get_user_type(request.user)
+
+        # Make sure we're a manager
+        if user_type == "Manager":
+            return super(CreateChecklistView, self).post(request, **kwargs)
+        else:
+            return HttpResponseRedirect('/home/')
