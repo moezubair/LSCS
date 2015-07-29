@@ -111,8 +111,10 @@ class EditChecklistView(generic.UpdateView):
                 self.hide_choice_fields(form)
         #Get the Weather
         weatherService = "http://api.openweathermap.org/data/2.5/weather?units=metric&lat="+str(checklist.latitude)+"&lon="+str(checklist.longitude)
+        #Acces weather data from weather service
         weatherStream = urllib.request.urlopen(weatherService)
         try:
+            #Read the weather data and parse
             json_result = weatherStream.read()
             parsed_json = json.loads(json_result.decode())
             temperature['min'] = parsed_json['main']['temp_min']

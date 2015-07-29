@@ -3,8 +3,14 @@
 {% load bootstrap3 %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
-
+{% load leaflet_tags %}
 {%  load static %}
+{% block bootstrap3_extra_head %}
+    {% leaflet_js %}
+    {% leaflet_css %}
+{% endblock %}
+{% leaflet_js %}
+{% leaflet_css %}
 
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
@@ -16,7 +22,11 @@
                     {% bootstrap_form form %}
                 </div>
                 <div class="col-md-4">
-                    <img src="{%  static 'images/maps-victoria.jpg' %}" alt="Google Map" class="img-responsive"/>
+                    {% leaflet_map "map" %}
+                    <script>
+                        var map = L.map('map').setView([{{ form.latitude.value }},{{ form.longitude.value }}],13);
+                        var marker = L.marker([{{ form.latitude.value }},{{ form.longitude.value }}]).addTo(map);
+                    </script>
                     <div class="col-md-12">
                         <h1>Weather Data</h1>
                         <div class="table-container">
