@@ -7,6 +7,7 @@
 {% block bootstrap3_title %}Home{% endblock %}
 
 {%  block content %}
+    <div class="container">
     {% if user_checklist_list %}
         <table class="table">
             <caption><b>My Checklists</b></caption>
@@ -51,7 +52,8 @@
         <p>No checklists are available.</p>
     {% endif %}
     {% if user_type == "Manager" %}
-    <a href="{% url 'create_checklist' %}" type="submit" class="btn btn-primary">Create Checklist</a>
+        <a href="{% url 'create_checklist' %}" type="submit" class="btn btn-primary">Create Checklist</a>
     {% endif %}
+    </div>
 {% endblock content%}
 
