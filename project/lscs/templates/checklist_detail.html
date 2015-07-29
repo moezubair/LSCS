@@ -25,6 +25,12 @@
                     {% leaflet_map "map" %}
                     <script>
                         var map = L.map('map').setView([{{ form.latitude.value }},{{ form.longitude.value }}],13);
+                        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+    attribution: 'Land Surveyor Checklist System',
+    maxZoom: 18,
+    id: 'moezubair.n1ak6nk3',
+    accessToken: 'pk.eyJ1IjoibW9lenViYWlyIiwiYSI6IjVlZDlmNDc3YTMxMTY2MDYxYTJiOTQ3YzJhYWRkZTIzIn0.Mix0gmORPtb4YXi0A7g8kg'
+}).addTo(map);
                         var marker = L.marker([{{ form.latitude.value }},{{ form.longitude.value }}]).addTo(map);
                     </script>
                     <div class="col-md-12">
