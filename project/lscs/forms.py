@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
-from django.forms import ModelForm
-from .models import Checklist
+from django.forms import ModelForm, BaseFormSet
+from .models import Checklist, ChecklistItem, ChecklistItemSelection
 
 
 class EditChecklistForm(ModelForm):
@@ -18,7 +18,6 @@ class EditChecklistForm(ModelForm):
         model = Checklist
         exclude = ['id']
 
-
 class CreateChecklistForm(ModelForm):
     def __init__(self, *args, **kwargs):
         # Call the super constructor
@@ -30,3 +29,10 @@ class CreateChecklistForm(ModelForm):
     class Meta:
         model = Checklist
         fields = ['title', 'description', 'file_number', 'land_district', 'latitude', 'longitude', 'assigned_to']
+
+
+class ChecklistItemForm(ModelForm):
+
+    class Meta:
+        model = ChecklistItem
+        exclude = ['id']

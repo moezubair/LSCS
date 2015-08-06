@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from django.db.models import Q
-from django.forms import model_to_dict, fields_for_model
+from django.forms import model_to_dict, fields_for_model, formset_factory, modelformset_factory
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
@@ -11,13 +11,13 @@ from django.views import generic
 from django.views.decorators.http import require_http_methods
 
 from project import settings
-from .models import Checklist
-from .forms import EditChecklistForm, CreateChecklistForm
+from .models import Checklist, ChecklistItem, ChecklistItemSelection
+from .forms import EditChecklistForm, CreateChecklistForm, ChecklistItemForm
 import urllib.request
 import json
 
-def get_user_type(user):
 
+def get_user_type(user):
     # We default to surveyor if they are not a manager (for now). Should clean this up to logout user if they are not either
     # Should also clean up user_type to use an enum or constant rather than a string
 
@@ -27,6 +27,7 @@ def get_user_type(user):
         user_type = "Surveyor"
 
     return user_type
+
 
 @require_http_methods(["GET", "POST"])
 def authenticate(request):
@@ -93,14 +94,13 @@ class HomeView(generic.ListView):
         # refresh the page regardless
         return HttpResponseRedirect('/home/')
 
-
     def get_context_data(self, **kwargs):
 
         # Call the base implementation first to get a context
         context = super(HomeView, self).get_context_data(**kwargs)
 
         # get the instance of the form being processed
-        #form = self.get_form(HomeView)
+        # form = self.get_form(HomeView)
 
         # check if the current user is a manager
         user = self.request.user
@@ -132,7 +132,10 @@ class EditChecklistView(generic.UpdateView):
         # get instance of checklist being updated
         checklist = self.object
 
-        # check if the current user is a manager
+        # get the formset of ChecklistItemSelections
+        item_form_set = self.get_checklist_item_form_set()
+
+        # get the current user
         user = self.request.user
 
         # if the user is not a manager, restrict edibility of certain fields
@@ -140,12 +143,13 @@ class EditChecklistView(generic.UpdateView):
             self.set_fields_readonly(form)
             self.hide_choice_fields(form)
 
-        #Get the Weather
-        weatherService = "http://api.openweathermap.org/data/2.5/weather?units=metric&lat="+str(checklist.latitude)+"&lon="+str(checklist.longitude)
-        #Acces weather data from weather service
+        # Get the Weather
+        weatherService = "http://api.openweathermap.org/data/2.5/weather?units=metric&lat=" + str(
+            checklist.latitude) + "&lon=" + str(checklist.longitude)
+        # Acces weather data from weather service
         weatherStream = urllib.request.urlopen(weatherService)
         try:
-            #Read the weather data and parse
+            # Read the weather data and parse
             json_result = weatherStream.read()
             parsed_json = json.loads(json_result.decode())
             temperature['min'] = parsed_json['main']['temp_min']
@@ -154,11 +158,21 @@ class EditChecklistView(generic.UpdateView):
             temperature['temp'] = parsed_json['main']['temp']
             temperature['pressure'] = parsed_json['main']['pressure']
         except Exception as e:
-            temperature = "Weather API Not available"+str(e)
+            temperature = "Weather API Not available" + str(e)
+
         # Update the context object
         context['form'] = form
+        context['item_form_set'] = item_form_set
         context['weather'] = temperature
         return context
+
+    def get_checklist_item_form_set(self):
+
+        ChecklistItemFormSet = modelformset_factory(ChecklistItem, exclude=['id'], form=ChecklistItemForm)
+
+        form_set = ChecklistItemFormSet(queryset=ChecklistItem.objects.all())
+
+        return form_set
 
     def form_valid(self, form):
 
@@ -192,10 +206,10 @@ class EditChecklistView(generic.UpdateView):
             for field in checklist_choice_fields:
                 if key == field:
                     form.fields[key].widget.attrs['disabled'] = 'disabled'
-  #  def getWeather(self, form):
+                    #  def getWeather(self, form):
+
 
 class CreateChecklistView(generic.FormView):
-
     template_name = 'create_checklist.html'
     form_class = CreateChecklistForm
     success_url = '/home/'
