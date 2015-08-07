@@ -4,6 +4,7 @@ import json
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
+from django.core.urlresolvers import reverse, resolve
 from django.forms import modelformset_factory
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -119,7 +120,10 @@ class EditChecklistView(generic.UpdateView):
     template_name = 'checklist_detail.html'
     model = Checklist
     form_class = EditChecklistForm
-    success_url = '/home/'
+
+    def get_success_url(self):
+        succ_url = self.request.META.get('HTTP_REFERER')
+        return succ_url
 
     def get_context_data(self, **kwargs):
         temperature = {}
@@ -244,7 +248,7 @@ def UpdateChecklistItemsView(request):
             formset.save()
     else:
         formset = ChecklistItemSelectionFormSet()
-    return HttpResponseRedirect('/home/')
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 class CreateChecklistView(generic.FormView):
 
