@@ -11,7 +11,7 @@ from django.views import generic
 from django.views.decorators.http import require_http_methods
 
 from project import settings
-from .models import Checklist
+from .models import Checklist, ChecklistItem, ChecklistItemSelection
 from .forms import EditChecklistForm, CreateChecklistForm
 import urllib.request
 import json
@@ -208,6 +208,18 @@ class CreateChecklistView(generic.FormView):
         checklist.status = Checklist.IN_PROGRESS
 
         checklist.save()
+
+        checklistItems = ChecklistItem.objects.all()
+
+        for checklistItem in checklistItems:
+
+            checklistItemSelection = ChecklistItemSelection()
+            checklistItemSelection.checklist = checklist
+            checklistItemSelection.checklistItem = checklistItem
+            checklistItemSelection.selection = ChecklistItemSelection.UNANSWERED
+            checklistItemSelection.created_by = checklist.assigned_to
+
+            checklistItemSelection.save()
 
         return super(CreateChecklistView, self).form_valid(form)
 
