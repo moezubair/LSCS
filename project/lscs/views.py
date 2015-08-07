@@ -241,11 +241,39 @@ class EditChecklistView(generic.UpdateView):
                     form.fields[key].widget.attrs['readonly'] = True
 
 def UpdateChecklistItemsView(request):
+
     ChecklistItemSelectionFormSet = modelformset_factory(ChecklistItemSelection, form=ChecklistItemSelectionForm, fields=['checklistItem', 'selection'])
+
     if request.method == 'POST':
+
         formset = ChecklistItemSelectionFormSet(request.POST, request.FILES)
+
         if formset.is_valid():
+
             formset.save()
+
+            allItemsPerformed = True
+
+            # Check if all items have been performed
+            for form in formset:
+
+                checklistItemSelection = form.instance
+
+                if checklistItemSelection.selection == ChecklistItemSelection.UNANSWERED:
+
+                    allItemsPerformed = False
+
+            if len(formset) > 0:
+
+                checklist = formset[0].instance.checklist
+
+                if allItemsPerformed:
+                    checklist.status = Checklist.UNDER_REVIEW
+                else:
+                    checklist.status = Checklist.IN_PROGRESS
+
+                checklist.save()
+
     else:
         formset = ChecklistItemSelectionFormSet()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
