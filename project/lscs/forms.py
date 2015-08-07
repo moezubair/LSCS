@@ -36,6 +36,8 @@ class CreateChecklistForm(ModelForm):
 
 class ChecklistItemSelectionForm(ModelForm):
 
+    selection = forms.ChoiceField(choices=ChecklistItemSelection.SELECTION_TYPES, widget=forms.RadioSelect)
+
     def __init__(self, *args, **kwargs):
 
         # Call the super constructor
@@ -50,8 +52,11 @@ class ChecklistItemSelectionForm(ModelForm):
             item_description = "Description Not Found"
 
         self.fields['selection'].label = item_description
+        # self.fields['selection'].empty_label = None
 
     class Meta:
         model = ChecklistItemSelection
         fields = ['checklistItem', 'selection']
-        widgets = {'checklistItem': forms.HiddenInput()}
+        widgets = {
+            'checklistItem': forms.HiddenInput()
+        }
