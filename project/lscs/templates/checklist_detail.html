@@ -12,6 +12,14 @@
 {% leaflet_js %}
 {% leaflet_css %}
 
+{% block bootstrap3_title %}
+{% if user_type == "Manager" %}
+Edit Checklist
+{% else %}
+Perform Checklist
+{% endif %}
+{% endblock %}
+
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
 {% block content %}
@@ -21,7 +29,9 @@
                 <div class="col-md-8">
                     <form id="checklist_form" method="post"> {% csrf_token %}
                         {% bootstrap_form form %}
+                        {% if user_type == "Manager" %}
                         <button type="submit" name="save_checklist" class="btn btn-primary" formaction="{% url 'checklist_detail' pk=checklist.pk %}">Save Checklist Changes</button>
+                        {% endif %}
                     </form>
 
                 </div>

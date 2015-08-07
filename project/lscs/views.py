@@ -138,16 +138,20 @@ class EditChecklistView(generic.UpdateView):
         # get the current user
         user = self.request.user
 
+        user_type = get_user_type(user)
+
         # if the user is not a manager, restrict edibility of certain fields
-        if get_user_type(user) != "Manager":
+        if user_type != "Manager":
             self.set_fields_readonly(form)
             self.hide_choice_fields(form)
 
         # Get the Weather
         weatherService = "http://api.openweathermap.org/data/2.5/weather?units=metric&lat=" + str(
             checklist.latitude) + "&lon=" + str(checklist.longitude)
+
         # Acces weather data from weather service
         weatherStream = urllib.request.urlopen(weatherService)
+
         try:
             # Read the weather data and parse
             json_result = weatherStream.read()
@@ -161,9 +165,11 @@ class EditChecklistView(generic.UpdateView):
             temperature = "Weather API Not available" + str(e)
 
         # Update the context object
+        context['user_type'] = user_type
         context['form'] = form
         context['item_form_set'] = item_form_set
         context['weather'] = temperature
+
         return context
 
     def get_checklist_item_form_set(self, checklist):
