@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
-from django.forms import ModelForm, BaseFormSet
+from django.forms import ModelForm
+
 from .models import Checklist, ChecklistItem, ChecklistItemSelection
 
 
@@ -36,10 +37,10 @@ class CreateChecklistForm(ModelForm):
 class ChecklistItemSelectionForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
+
         # Call the super constructor
         super(ChecklistItemSelectionForm, self).__init__(*args, **kwargs)
 
-    def set_description(self):
         current_selection = self.instance
 
         try:
@@ -48,9 +49,9 @@ class ChecklistItemSelectionForm(ModelForm):
         except Exception:
             item_description = "Description Not Found"
 
-        self.fields['description'] = item_description
+        self.fields['selection'].label = item_description
 
     class Meta:
         model = ChecklistItemSelection
-        #exclude = ['id']
         fields = ['checklistItem', 'selection']
+        widgets = {'checklistItem': forms.HiddenInput()}
