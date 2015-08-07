@@ -10,15 +10,12 @@ class EditChecklistForm(ModelForm):
         # Call the super constructor
         super(EditChecklistForm, self).__init__(*args, **kwargs)
 
-        # Change created_by field to only show managers
-        self.fields['created_by'].queryset = User.objects.filter(groups__name="Manager")
-
         # Change assigned_to to only show surveyors
         self.fields['assigned_to'].queryset = User.objects.filter(groups__name="Surveyor")
 
     class Meta:
         model = Checklist
-        exclude = ['id']
+        fields = ['title', 'description', 'file_number', 'land_district', 'latitude', 'longitude', 'status', 'assigned_to']
 
 
 class CreateChecklistForm(ModelForm):
