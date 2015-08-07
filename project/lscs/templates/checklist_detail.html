@@ -15,14 +15,15 @@
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
 {% block content %}
-    <form method="post"> {% csrf_token %}
+
         <div class="container">
             <div class="row">
                 <div class="col-md-8">
-                    {% bootstrap_form form %}
-                    {% for form in item_form_set.forms %}
+                    <form id="checklist_form" method="post"> {% csrf_token %}
                         {% bootstrap_form form %}
-                    {% endfor %}
+                        <button type="submit" name="save_checklist" class="btn btn-primary" formaction="{% url 'checklist_detail' pk=checklist.pk %}">Save Checklist Changes</button>
+                    </form>
+
                 </div>
                 <div class="col-md-4">
                     {% leaflet_map "map" %}
@@ -63,14 +64,27 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                {%  buttons %}
-                <button type="submit" name="save" class="btn btn-primary">Save Changes</button>
-                <button type="reset" class="btn btn-info">Undo Changes</button>
-                <a role="button" class="btn btn-info" href="{% url 'home' %}">Cancel</a>
-                {% endbuttons %}
 
-            </div>
+
+                <div class="row">
+                    <div class="col-md-8">
+                        <h2>Checklist Items</h2>
+                        <form id="item_form_set" method="post"> {% csrf_token %}
+                        {{ item_form_set.management_form }}
+                        {% for item_form in item_form_set.forms %}
+                            {% bootstrap_form item_form %}
+                        {% endfor %}
+                            <button type="submit" name="save_selections" class="btn btn-primary" formaction="{% url 'checklist_items' %}">Save Items Changes</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="row">
+                    {%  buttons %}
+                    <a role="button" class="btn btn-info" href="{% url 'home' %}">Done</a>
+                    {% endbuttons %}
+
+                </div>
         </div>
-    </form>
+
 {% endblock content %}

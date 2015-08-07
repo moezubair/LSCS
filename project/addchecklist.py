@@ -1,9 +1,12 @@
 import django
 from django.contrib.auth.models import User, Group
-from lscs.models import Checklist
+from lscs.models import Checklist, ChecklistItemSelection, ChecklistItem
 
 # Simple script to insert a test checklist
 # Attempts to create a test manager and surveyor user to fulfill the 'created_by' and 'assigned_to' fields
+
+
+
 def main():
 
     django.setup()
@@ -44,6 +47,9 @@ def main():
 
     test_checklist.save()
 
+    test_checklistitemselection = create_checklistitemselection(1, test_checklist, test_manager)
+    test_checklistitemselection = create_checklistitemselection(1, test_checklist, test_manager)
+
 def create_user(username, password, first_name, last_name, group):
 
     try:
@@ -59,6 +65,16 @@ def create_user(username, password, first_name, last_name, group):
     user.groups.add(group)
 
     return user
+
+def create_checklistitemselection(selection, checklist, created_by):
+    checklistitemselection = ChecklistItemSelection()
+    checklistitemselection.selection = selection
+    checklistitemselection.checklist = checklist
+    checklistitemselection.checklistItem = ChecklistItem.objects.first()
+    checklistitemselection.created_by = created_by
+    checklistitemselection.save()
+
+    return checklistitemselection
 
 if __name__ == '__main__':
     main()

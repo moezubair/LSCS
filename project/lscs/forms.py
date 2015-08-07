@@ -1,3 +1,4 @@
+from django import forms
 from django.contrib.auth.models import User
 from django.forms import ModelForm, BaseFormSet
 from .models import Checklist, ChecklistItem, ChecklistItemSelection
@@ -18,6 +19,7 @@ class EditChecklistForm(ModelForm):
         model = Checklist
         exclude = ['id']
 
+
 class CreateChecklistForm(ModelForm):
     def __init__(self, *args, **kwargs):
         # Call the super constructor
@@ -31,8 +33,24 @@ class CreateChecklistForm(ModelForm):
         fields = ['title', 'description', 'file_number', 'land_district', 'latitude', 'longitude', 'assigned_to']
 
 
-class ChecklistItemForm(ModelForm):
+class ChecklistItemSelectionForm(ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        # Call the super constructor
+        super(ChecklistItemSelectionForm, self).__init__(*args, **kwargs)
+
+    def set_description(self):
+        current_selection = self.instance
+
+        try:
+            checklist_item = ChecklistItem.objects.get(pk=current_selection.checklistItem.pk)
+            item_description = str(checklist_item.description)
+        except Exception:
+            item_description = "Description Not Found"
+
+        self.fields['description'] = item_description
 
     class Meta:
-        model = ChecklistItem
-        exclude = ['id']
+        model = ChecklistItemSelection
+        #exclude = ['id']
+        fields = ['checklistItem', 'selection']

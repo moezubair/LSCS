@@ -1,9 +1,10 @@
+import urllib.request
+import json
+
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.models import User
-from django.db.models import Q
-from django.forms import model_to_dict, fields_for_model
+from django.forms import modelformset_factory
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
@@ -12,9 +13,8 @@ from django.views.decorators.http import require_http_methods
 
 from project import settings
 from .models import Checklist, ChecklistItem, ChecklistItemSelection
-from .forms import EditChecklistForm, CreateChecklistForm, ChecklistItemForm
-import urllib.request
-import json
+from .forms import EditChecklistForm, CreateChecklistForm, ChecklistItemSelectionForm
+
 
 def get_user_type(user):
 
@@ -100,7 +100,7 @@ class HomeView(generic.ListView):
         context = super(HomeView, self).get_context_data(**kwargs)
 
         # get the instance of the form being processed
-        # form = self.get_form(HomeView)
+        #form = self.get_form(HomeView)
 
         # check if the current user is a manager
         user = self.request.user
@@ -133,7 +133,7 @@ class EditChecklistView(generic.UpdateView):
         checklist = self.object
 
         # get the formset of ChecklistItemSelections
-        item_form_set = self.get_checklist_item_form_set()
+        item_form_set = self.get_checklist_item_form_set(checklist)
 
         # get the current user
         user = self.request.user
@@ -166,11 +166,25 @@ class EditChecklistView(generic.UpdateView):
         context['weather'] = temperature
         return context
 
-    def get_checklist_item_form_set(self):
+    def get_checklist_item_form_set(self, checklist):
 
-        ChecklistItemFormSet = modelformset_factory(ChecklistItem, exclude=['id'], form=ChecklistItemForm)
+        ChecklistItemFormSet = modelformset_factory(ChecklistItemSelection, fields=['checklistItem', 'selection'],
+                                                    form=ChecklistItemSelectionForm)
 
-        form_set = ChecklistItemFormSet(queryset=ChecklistItem.objects.all())
+        selection_queryset = ChecklistItemSelection.objects.filter(checklist=checklist)
+
+        selection_query_results = list(selection_queryset.values())
+
+        form_set = ChecklistItemFormSet(queryset=selection_queryset)
+
+        # remove any forms without a pk (weird bug, where formset generates empty form)
+        for form in form_set:
+            if form.instance.pk is None:
+                form_set.forms.remove(form)
+
+        # make the description field uneditable
+        for form in form_set:
+            self.set_formsetfields_readonly(form)
 
         return form_set
 
@@ -206,7 +220,25 @@ class EditChecklistView(generic.UpdateView):
             for field in checklist_choice_fields:
                 if key == field:
                     form.fields[key].widget.attrs['disabled'] = 'disabled'
-                    #  def getWeather(self, form):
+
+    def set_formsetfields_readonly(self, form):
+        item_selection_fields = [
+            'checklistItem',
+        ]
+        for key, value in form.fields.items():
+            for field in item_selection_fields:
+                if key == field:
+                    form.fields[key].widget.attrs['readonly'] = True
+
+def UpdateChecklistItemsView(request):
+    ChecklistItemSelectionFormSet = modelformset_factory(ChecklistItemSelection, form=ChecklistItemSelectionForm, fields=['checklistItem', 'selection'])
+    if request.method == 'POST':
+        formset = ChecklistItemSelectionFormSet(request.POST, request.FILES)
+        if formset.is_valid():
+            formset.save()
+    else:
+        formset = ChecklistItemSelectionFormSet()
+    return HttpResponseRedirect('/home/')
 
 class CreateChecklistView(generic.FormView):
 
