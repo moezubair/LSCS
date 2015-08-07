@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from django.db.models import Q
-from django.forms import model_to_dict, fields_for_model, formset_factory, modelformset_factory
+from django.forms import model_to_dict, fields_for_model
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
@@ -16,8 +16,8 @@ from .forms import EditChecklistForm, CreateChecklistForm, ChecklistItemForm
 import urllib.request
 import json
 
-
 def get_user_type(user):
+
     # We default to surveyor if they are not a manager (for now). Should clean this up to logout user if they are not either
     # Should also clean up user_type to use an enum or constant rather than a string
 
@@ -27,7 +27,6 @@ def get_user_type(user):
         user_type = "Surveyor"
 
     return user_type
-
 
 @require_http_methods(["GET", "POST"])
 def authenticate(request):
@@ -93,6 +92,7 @@ class HomeView(generic.ListView):
 
         # refresh the page regardless
         return HttpResponseRedirect('/home/')
+
 
     def get_context_data(self, **kwargs):
 
@@ -208,8 +208,8 @@ class EditChecklistView(generic.UpdateView):
                     form.fields[key].widget.attrs['disabled'] = 'disabled'
                     #  def getWeather(self, form):
 
-
 class CreateChecklistView(generic.FormView):
+
     template_name = 'create_checklist.html'
     form_class = CreateChecklistForm
     success_url = '/home/'
@@ -222,6 +222,18 @@ class CreateChecklistView(generic.FormView):
         checklist.status = Checklist.IN_PROGRESS
 
         checklist.save()
+
+        checklistItems = ChecklistItem.objects.all()
+
+        for checklistItem in checklistItems:
+
+            checklistItemSelection = ChecklistItemSelection()
+            checklistItemSelection.checklist = checklist
+            checklistItemSelection.checklistItem = checklistItem
+            checklistItemSelection.selection = ChecklistItemSelection.UNANSWERED
+            checklistItemSelection.created_by = checklist.assigned_to
+
+            checklistItemSelection.save()
 
         return super(CreateChecklistView, self).form_valid(form)
 
